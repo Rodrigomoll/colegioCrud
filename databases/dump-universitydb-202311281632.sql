@@ -59,7 +59,7 @@ CREATE TABLE `clases` (
   PRIMARY KEY (`id`),
   KEY `maestro_id` (`maestro_id`),
   CONSTRAINT `clases_ibfk_1` FOREIGN KEY (`maestro_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `clases` (
 
 LOCK TABLES `clases` WRITE;
 /*!40000 ALTER TABLE `clases` DISABLE KEYS */;
-INSERT INTO `clases` VALUES (1,'Matemáticas',7,NULL),(2,'Historia',8,NULL),(3,'Ciencias',9,NULL),(4,'Programacion',2,NULL),(7,'ingles',7,NULL);
+INSERT INTO `clases` VALUES (1,'Matemáticas',7,NULL),(2,'Historia',8,NULL),(3,'Ciencias',9,NULL),(4,'Programacion',2,NULL),(8,'musica',9,NULL);
 /*!40000 ALTER TABLE `clases` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,11 +142,14 @@ CREATE TABLE `usuarios` (
   `contrasena` varchar(255) DEFAULT NULL,
   `rol_id` int(11) DEFAULT NULL,
   `maestro_id` int(11) DEFAULT NULL,
+  `clase_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `correo` (`correo`),
   KEY `rol_id` (`rol_id`),
+  KEY `fk_clase` (`clase_id`),
+  CONSTRAINT `fk_clase` FOREIGN KEY (`clase_id`) REFERENCES `clases` (`id`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +158,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'123456789','admin','admin@admin','Calle 123, Ciudad','1990-01-01','admin',1,NULL),(2,'987654321','maestro','maestro@maestro','Avenida XYZ, Ciudad','1985-05-15','maestro',2,NULL),(3,'456789012','alumno','alumno@alumno','Carrera ABC, Ciudad','2000-07-20','alumno',3,NULL),(7,'123456789M','MaestroUno','maestro1@example.com','Calle Maestra 123','1980-01-15','maestro1',2,4),(8,'987654321M','MaestroDos','maestro2@example.com1','Avenida Educación 4561','1975-01-20','maestro2',2,3),(9,'555555555M','MaestroTres','maestro3@example.com1','Calle del Saber 7891','1988-02-10','maestro3',2,1);
+INSERT INTO `usuarios` VALUES (1,'123456789','admin','admin@admin','Calle 123, Ciudad','1990-01-01','admin',1,NULL,NULL),(2,'987654321','maestro1','maestro@maestro','Avenida XYZ, Ciudad1','1985-02-15','maestro',2,NULL,2),(3,'456789012','alumno','alumno@alumno','Carrera ABC, Ciudad','2000-07-20','alumno',3,NULL,NULL),(7,'123456789M','MaestroUno','maestro1@example.com','Calle Maestra 123','1980-01-15','maestro1',2,4,2),(8,'987654321M','MaestroDos','maestro2@example.com1','Avenida Educación 4561','1975-01-20','maestro2',2,3,3),(9,'555555555M','MaestroTres','maestro3@example.com1','Calle del Saber 789','1988-01-10','maestro3',2,1,4),(10,NULL,'Nombre del Usuario','correo@example.com','Dirección del Usuario','1990-01-01',NULL,2,NULL,8),(16,'1','rodrigo','rodrigo@rodrigo','puno','2000-01-08',NULL,3,NULL,NULL),(17,'777','diego','diego@diego','arequipa','2008-08-08',NULL,3,NULL,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 13:07:22
+-- Dump completed on 2023-11-28 16:32:54
