@@ -249,9 +249,9 @@ class Model
     {
         $query = "SELECT usuarios.id, usuarios.nombre, usuarios.correo, usuarios.direccion, usuarios.fec_nac, clases.nombre as clase
         FROM usuarios
-        LEFT JOIN clases ON usuarios.id = clases.maestro_id
+        LEFT JOIN clases ON usuarios.clase_id = clases.id
         WHERE usuarios.rol_id = 2
-        ORDER BY usuarios.id ASC;";
+        ORDER BY usuarios.id ASC";
 
         $res = $this->db->query($query);
 
@@ -266,20 +266,20 @@ class Model
     }
 
     public function allClasesMaestros()
-{
-    $query = "SELECT * FROM clases";
+    {
+        $query = "SELECT * FROM clases";
 
-    $res = $this->db->query($query);
+        $res = $this->db->query($query);
 
-    if ($res) {
-        $data = $res->fetch_all(MYSQLI_ASSOC);
-        return $data;
-    } else {
-        // Manejo de errores si la consulta falla
-        echo "Error en la consulta: " . $this->db->error;
-        return [];
+        if ($res) {
+            $data = $res->fetch_all(MYSQLI_ASSOC);
+            return $data;
+        } else {
+            // Manejo de errores si la consulta falla
+            echo "Error en la consulta: " . $this->db->error;
+            return [];
+        }
     }
-}
 
 
     public function findMaestro($id)
@@ -309,13 +309,19 @@ class Model
 
             $values = array_values($data);
             $valuesString = implode("', '", $values);
+
+            // Construir el query de inserción en la tabla 'usuarios'
             $query = "INSERT INTO {$this->table}($keysString) VALUES ('$valuesString')";
+
+            // Imprimir la consulta para depuración
+            var_dump($query);
+            echo $query;
 
             $res = $this->db->query($query);
 
             if ($res) {
                 $ultimoId = $this->db->insert_id;
-                $data = $this->findMaestro($ultimoId);
+                $data = $this->find($ultimoId);
 
                 return $data;
             } else {
@@ -326,41 +332,35 @@ class Model
         }
     }
 
+
+
     // Model.php
 
     public function updateMaestro($data)
     {
         // Este array almacenará los pares columna-valor para la consulta de actualización
         $updatePairs = [];
-    
+
         foreach ($data as $key => $value) {
-            // Excluir columnas que no deseas actualizar
-            if ($key !== 'nombre' && $key !== 'maestro_id' && $key !== 'direccion') {
+            // Excluir la columna 'correo' de la actualización
+            if ($key !== 'correo') {
                 $updatePairs[] = "$key = '$value'";
             }
         }
-    
-        // Agregar la columna 'direccion' a la consulta de actualización
-        if (isset($data['direccion'])) {
-            $updatePairs[] = "direccion = '{$data["direccion"]}'";
-        }
-    
+
+        // Construir la consulta de actualización en la tabla 'usuarios'
         session_start();
-    
-        // Agregar la columna 'maestro_id' a la lista de pares a actualizar
-        $updatePairs[] = "maestro_id = '{$data["maestro_id"]}'";
-    
-        // Construir la consulta de actualización
-        $query = "UPDATE usuarios SET " . implode(", ", $updatePairs) . " WHERE id = '{$_SESSION["maestroid_edit"]}'";
-    
+        $userId = $_SESSION["maestroid_edit"];
+        $query = "UPDATE usuarios SET " . implode(", ", $updatePairs) . " WHERE id = '$userId'";
+
         // Imprimir la consulta para depuración
         var_dump($query);
-    
+
         // Ejecutar la consulta de actualización
         $this->db->query($query);
     }
-    
-    
+
+
 
 
     public function destroyMaestro($id)
@@ -371,6 +371,98 @@ class Model
         // Llamada al método destroy genérico
         $this->destroy($id);
     }
+
+
+    /**
+     * Método para obtener un alumno por su ID.
+     *
+     * @param integer $id ID del alumno.
+     * @return array|null Arreglo con los datos del alumno o null si no se encuentra.
+     */
+    public function findAlumno($id)
+    {
+        $res = $this->db->query("SELECT * FROM usuarios WHERE rol_id = 3 AND id = $id");
+        $data = $res->fetch_assoc();
+
+        return $data;
+    }
+
+    /**
+     * Método para crear un nuevo alumno.
+     *
+     * @param array $data Arreglo asociativo con los datos del nuevo alumno.
+     * @return array|null Arreglo con los datos del nuevo alumno o null si no se pudo crear.
+     */
+    public function createAlumno($data)
+    {
+        // Asegúrate de que el rol sea el correspondiente al alumno
+        $data['rol_id'] = 3;
+
+        try {
+            // Esto hace que sin importar los pares de clave y valor de la variable $data, el $query sea reutilizable.
+            $keys = array_keys($data);
+            $keysString = implode(", ", $keys);
+
+            $values = array_values($data);
+            $valuesString = implode("', '", $values);
+
+            // Construir el query de inserción en la tabla 'usuarios'
+            $query = "INSERT INTO {$this->table}($keysString) VALUES ('$valuesString')";
+
+            $res = $this->db->query($query);
+
+            if ($res) {
+                $ultimoId = $this->db->insert_id;
+                $data = $this->findAlumno($ultimoId);
+
+                return $data;
+            } else {
+                return null;
+            }
+        } catch (mysqli_sql_exception $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    /**
+     * Método para actualizar un alumno.
+     *
+     * @param array $data Arreglo asociativo con los datos a actualizar.
+     * @return void
+     */
+    public function updateAlumno($data)
+    {
+        // Este array almacenará los pares columna-valor para la consulta de actualización
+        $updatePairs = [];
+
+        foreach ($data as $key => $value) {
+            // Excluir la columna 'correo' de la actualización
+            if ($key !== 'correo') {
+                $updatePairs[] = "$key = '$value'";
+            }
+        }
+
+        // Construir la consulta de actualización en la tabla 'usuarios'
+        session_start();
+        $userId = $_SESSION["alumnoid_edit"];
+        $query = "UPDATE usuarios SET " . implode(", ", $updatePairs) . " WHERE id = '$userId' AND rol_id = 3";
+
+        $this->db->query($query);
+    }
+
+    /**
+     * Método para eliminar un alumno por su ID.
+     *
+     * @param integer $id ID del alumno a eliminar.
+     * @return void
+     */
+    public function destroyAlumno($id)
+    {
+        // Llamada al método destroy genérico
+        $this->destroy($id);
+    }
+
     /**
      * Método para encontrar un dato utilizando la columna, operador y valor.
      *

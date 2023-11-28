@@ -3,6 +3,8 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/Controllers/LoginController.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/controllers/AdminController.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/controllers/ClasesController.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/controllers/MaestrosController.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/controllers/AlumnoController.php");
+
 
 
 
@@ -11,6 +13,7 @@ $loginController = new LoginController();
 $adminController = new AdminController();
 $clasesController = new ClasesController();
 $maestrosController = new MaestrosController();
+$alumnosController = new AlumnosController();
 
 
 // Dividimos la ruta por el signo "?" para no leer los query params. Ejem: /clientes?id=1
@@ -50,6 +53,17 @@ if ($method === "POST") {
             break;
         case '/maestros/update':
             $maestrosController->update($_POST);
+            break;
+
+        case '/alumnos/delete':
+            $alumnosController->delete($_POST["id"]);
+            break;
+        case '/alumnos/create':
+            $alumnosController->store($_POST);
+            break;
+        case '/alumnos/update':
+            $alumnosController->update($_POST);
+            break;
         default:
             echo "NO ENCONTRAMOS LA RUTA.";
             break;
@@ -90,6 +104,16 @@ if ($method === "GET") {
             break;
         case '/maestros/create':
             $maestrosController->create();
+            break;
+
+        case '/alumnos':
+            $alumnosController->index();
+            break;
+        case '/alumnos/edit':
+            $alumnosController->edit($_GET["id"]);
+            break;
+        case '/alumnos/create':
+            $alumnosController->create();
             break;
         default:
             echo "NO ENCONTRAMOS LA RUTA.";

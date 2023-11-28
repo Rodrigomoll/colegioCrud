@@ -23,7 +23,7 @@ class MaestrosController
     public function create()
     {
         // Método para mostrar el formulario de creación de maestros
-        $roles = $this->model->allRoles(); // Puedes necesitar obtener los roles para el formulario
+        $clasesMaestros = $this->model->allClasesMaestros(); // Puedes necesitar obtener los roles para el formulario
         include $_SERVER["DOCUMENT_ROOT"] . "/views/maestros/create.php";
     }
 

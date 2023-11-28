@@ -39,8 +39,8 @@ $_SESSION["maestroid_edit"] = $maestro["id"];
                 <input type="date" id="fec_nac" name="fec_nac" value="<?= $maestro["fec_nac"] ?>" class="mt-1 p-2 w-full border rounded-md">
             </div>
             <div class="mb-4">
-                <label for="maestro_id" class="block text-sm font-medium text-gray-600">Clase Asignada:</label>
-                <select id="maestro_id" name="maestro_id" class="mt-1 p-2 w-full border rounded-md">
+                <label for="clase_id" class="block text-sm font-medium text-gray-600">Clase Asignada:</label>
+                <select id="clase_id" name="clase_id" class="mt-1 p-2 w-full border rounded-md">
                     <?php
                     // Itera sobre las clases y crea las opciones del select
                     foreach ($clasesMaestros as $clase) {
