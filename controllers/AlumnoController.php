@@ -35,7 +35,7 @@ class AlumnosController
      */
     public function edit($id)
     {
-        $alumno = $this->model->find($id);
+        $alumno = $this->model->findAlumno($id);
         // Puedes agregar lógica adicional según sea necesario
 
         include $_SERVER["DOCUMENT_ROOT"] . "/views/alumnos/edit.php";
@@ -48,7 +48,7 @@ class AlumnosController
     {
         // Asumiendo que el rol_id para alumnos es 3
         $request['rol_id'] = 3;
-        $this->model->update($request);
+        $this->model->updateAlumno($request);
 
         header("Location: /alumnos");
     }
@@ -62,7 +62,7 @@ class AlumnosController
     {
         // Asumiendo que el rol_id para alumnos es 3
         $request['rol_id'] = 3;
-        $response = $this->model->create($request);
+        $response = $this->model->createAlumno($request);
 
         header("Location: /alumnos");
     }
@@ -72,7 +72,7 @@ class AlumnosController
      */
     public function delete($id)
     {
-        $this->model->destroy($id);
+        $this->model->destroyAlumno($id);
 
         header("Location: /alumnos");
     }

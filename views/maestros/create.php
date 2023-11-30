@@ -1,10 +1,4 @@
-<?php
-// Asegúrate de iniciar la sesión en el controlador correspondiente
 
-// Verifica si la variable $clases y $maestros está definida; si no, establece un valor predeterminado vacío.
-$clases = isset($clases) ? $clases : [];
-$maestros = isset($maestros) ? $maestros : [];
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,9 +36,9 @@ $maestros = isset($maestros) ? $maestros : [];
                 <label for="clase_asignada" class="block text-sm font-medium text-gray-600">Clase Asignada:</label>
                 <select id="clase_asignada" name="clase_asignada" class="mt-1 p-2 w-full border rounded-md">
                     <?php
-                    // Itera sobre las clases y crea las opciones del select
-                    foreach ($clasesMaestros as $clase) {
-                        echo "<option value='{$clase["id"]}'>{$clase["nombre"]}</option>";
+                    // Itera sobre los maestros y crea las opciones del select
+                    foreach ($maestrosClase as $maestro) {
+                        echo "<option value='{$maestro["id"]}'> {$maestro["clase_asignada"]}</option>";
                     }
                     ?>
                 </select>

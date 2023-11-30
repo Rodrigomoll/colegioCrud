@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/dist/output.css" rel="stylesheet">
+    <!-- Enlace a los estilos de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-WIcUY6qXMzxFM3H/Lkau1iFkw8LtMmBKZ0O2m3e7VGdJ0ZwCMA5TTBw5KDzNf/PcEQbrh9tU2ENbDBHdP7AR/w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Dashboard</title>
 </head>
 
@@ -14,6 +16,10 @@
     ?>
 
     <div class="bg-gray-700 w-1/5 h-screen p-4 text-white text-lg flex flex-col items-center">
+        <div class="flex items-center mb-4">
+            <img src="../assets/logo.jpg" alt="Logo de la Universidad" class="w-8 h-8 mr-2">
+            <h1 class="text-lg font-semibold">Universidad</h1>
+        </div>
         <?php
         // Verificar si el usuario está autenticado
         if (isset($_SESSION["user"])) {
@@ -29,21 +35,21 @@
 
             // Mostrar elementos específicos para el rol de admin
             if ($rol == 1) {
-                echo '<li><a href="/permisos" id="linkPermisos" class="block text-center py-2 hover:bg-gray-600">Permisos</a></li>';
-                echo '<li><a href="/maestros" class="block text-center py-2 hover:bg-gray-600">Maestros</a></li>';
-                echo '<li><a href="/alumnos" class="block text-center py-2 hover:bg-gray-600">Alumnos</a></li>';
-                echo '<li><a href="/clases" class="block text-center py-2 hover:bg-gray-600">Clases</a></li>';
+                echo '<li><a href="/permisos" class="flex items-center block text-center py-2 hover:bg-gray-600"><i class="fas fa-shield-alt mr-2"></i> Permisos</a></li>';
+                echo '<li><a href="/maestros" class="flex items-center block text-center py-2 hover:bg-gray-600"><i class="fas fa-chalkboard-teacher mr-2"></i> Maestros</a></li>';
+                echo '<li><a href="/alumnos" class="flex items-center block text-center py-2 hover:bg-gray-600"><i class="fas fa-users mr-2"></i> Alumnos</a></li>';
+                echo '<li><a href="/clases" class="flex items-center block text-center py-2 hover:bg-gray-600"><i class="fas fa-book mr-2"></i> Clases</a></li>';
             }
 
             // Mostrar elementos específicos para el rol de maestro
             if ($rol == 2) {
-                echo '<li><a href="/dashboard/clases" class="block text-center py-2 hover:bg-gray-600">Clases</a></li>';
+                echo '<li><a href="/maestros_clases" class="flex items-center block text-center py-2 hover:bg-gray-600"><i class="fas fa-chalkboard-teacher mr-2"></i> Administra tus clases</a></li>';
                 // Puedes personalizar o no mostrar más elementos según el rol de maestro
             }
 
             // Mostrar elementos específicos para el rol de alumno
             if ($rol == 3) {
-                echo '<li><a href="/dashboard/clases" class="block text-center py-2 hover:bg-gray-600">Mis Clases</a></li>';
+                echo '<li><a href="/alumnos_clase" class="flex items-center block text-center py-2 hover:bg-gray-600"><i class="fas fa-chalkboard-teacher mr-2"></i> Alumnos</a></li>';
                 // Puedes personalizar o no mostrar más elementos según el rol de alumno
             }
             ?>

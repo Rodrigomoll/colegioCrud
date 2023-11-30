@@ -16,6 +16,10 @@
     ?>
 
 <div class="bg-gray-700 w-1/5 h-screen p-4 text-white text-lg flex flex-col items-center">
+<div class="flex items-center mb-4">
+            <img src="../assets/logo.jpg" alt="Logo de la Universidad" class="w-8 h-8 mr-2">
+            <h1 class="text-lg font-semibold">Universidad</h1>
+        </div>
         <?php
         // Verificar si el usuario está autenticado
         if (isset($_SESSION["user"])) {
@@ -60,7 +64,7 @@
         </header>
 
         <div class=" bg-gray-400 w-full h-full flex flex-col items-center">
-            <a href="/clases/create">CREAR NUEVO CLIENTE</a>
+            <a href="/clases/create">CREAR NUEVA CLASE</a>
             <table class="w-4/5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-10">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>

@@ -60,7 +60,7 @@ class ClasesController
      */
     public function store($request)
     {
-        $response = $this->model->create($request);
+        $response = $this->model->createClase($request);
 
         header("Location: /clases");
     }

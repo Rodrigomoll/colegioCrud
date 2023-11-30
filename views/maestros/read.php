@@ -16,6 +16,10 @@
     ?>
 
 <div class="bg-gray-700 w-1/5 h-screen p-4 text-white text-lg flex flex-col items-center">
+<div class="flex items-center mb-4">
+            <img src="../assets/logo.jpg" alt="Logo de la Universidad" class="w-8 h-8 mr-2">
+            <h1 class="text-lg font-semibold">Universidad</h1>
+        </div>
         <?php
         // Verificar si el usuario está autenticado
         if (isset($_SESSION["user"])) {
@@ -89,8 +93,8 @@
                 </thead>
                 <tbody>
                     <?php
-                    // var_dump($maestrosConClase);
-                    foreach ($maestrosConClase as $maestro) { ?>
+                    // var_dump($maestrosAsignado);
+                    foreach ($maestroTabla as $maestro) { ?>
                         <tr class="bh-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <?= $maestro["id"] ?>
@@ -108,7 +112,7 @@
                                 <?= $maestro["fec_nac"] ?>
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <?= $maestro["clase"] ?>
+                                <?= $maestro["clase_asignada"] ?>
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex">
                                 <a href="/maestros/edit?id=<?= $maestro["id"] ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline flex justify-center items-center mr-4"><i class="fas fa-edit"></i></a>

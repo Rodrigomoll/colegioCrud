@@ -70,7 +70,8 @@ class Model
             return [];
         }
     }
-    /**
+
+        /**
      * Método para crear un nuevo registro en la tabla.
      *
      * @param array $data Arreglo asociativo con los datos a ingresar.
@@ -139,7 +140,21 @@ class Model
     }
 
 
+    public function allClaseAsignada()
+    {
+        $query = "SELECT * FROM clases";
 
+        $res = $this->db->query($query);
+
+        if ($res) {
+            $data = $res->fetch_all(MYSQLI_ASSOC);
+            return $data;
+        } else {
+            // Manejo de errores si la consulta falla
+            echo "Error en la consulta: " . $this->db->error;
+            return [];
+        }
+    }
     // Métodos específicos para Clases
     public function allClases()
     {
@@ -186,12 +201,13 @@ class Model
             $values = array_values($data);
             $valuesString = implode("', '", $values);
             $query = "insert into {$this->table}($keysString) values ('$valuesString')";
+            var_dump("$query");
 
             $res = $this->db->query($query);
 
             if ($res) {
                 $ultimoId = $this->db->insert_id;
-                $data = $this->find($ultimoId);
+                $data = $this->findClase($ultimoId);
 
                 return $data;
             } else {
@@ -244,98 +260,68 @@ class Model
         $this->destroy($id);
     }
 
-    // Métodos específicos para Maestros
-    public function allMaestrosClase()
+    /**
+     * Método para obtener un alumno por su ID.
+     *
+     * @param integer $id ID del alumno.
+     * @return array|null Arreglo con los datos del alumno o null si no se encuentra.
+     */
+    public function findMaestro()
     {
-        $query = "SELECT usuarios.id, usuarios.nombre, usuarios.correo, usuarios.direccion, usuarios.fec_nac, clases.nombre as clase
+        $query = "SELECT usuarios.id, usuarios.nombre, usuarios.correo, usuarios.direccion, usuarios.fec_nac, clases.nombre as clase_asignada
         FROM usuarios
         LEFT JOIN clases ON usuarios.clase_id = clases.id
-        WHERE usuarios.rol_id = 2
-        ORDER BY usuarios.id ASC";
+        WHERE usuarios.rol_id = 2";
 
         $res = $this->db->query($query);
+        $data = $res->fetch_all(MYSQLI_ASSOC);
 
-        if ($res) {
-            $data = $res->fetch_all(MYSQLI_ASSOC);
-            return $data;
-        } else {
-            // Manejo de errores si la consulta falla
-            echo "Error en la consulta: " . $this->db->error;
-            return [];
-        }
-    }
-
-    public function allClasesMaestros()
-    {
-        $query = "SELECT * FROM clases";
-
-        $res = $this->db->query($query);
-
-        if ($res) {
-            $data = $res->fetch_all(MYSQLI_ASSOC);
-            return $data;
-        } else {
-            // Manejo de errores si la consulta falla
-            echo "Error en la consulta: " . $this->db->error;
-            return [];
-        }
+        return $data;
     }
 
 
-    public function findMaestro($id)
-    {
-        $query = "SELECT * FROM usuarios WHERE id = $id AND rol_id = 2";
-        $res = $this->db->query($query);
-
-        if ($res) {
-            $data = $res->fetch_assoc();
-            return $data;
-        } else {
-            // Manejo de errores si la consulta falla
-            echo "Error en la consulta: " . $this->db->error;
-            return null;
-        }
-    }
-
+    /**
+     * Método para crear un nuevo registro en la tabla.
+     *
+     * @param array $data Arreglo asociativo con los datos a ingresar.
+     * @return array Arreglo con los datos de la fila ingresada.
+     */
     public function createMaestro($data)
     {
         try {
-            // Asegúrate de que el rol sea el correspondiente al maestro
-            $data['rol_id'] = 2;
-
             // Esto hace que sin importar los pares de clave y valor de la variable $data, el $query sea reutilizable.
             $keys = array_keys($data);
             $keysString = implode(", ", $keys);
 
             $values = array_values($data);
             $valuesString = implode("', '", $values);
-
-            // Construir el query de inserción en la tabla 'usuarios'
-            $query = "INSERT INTO {$this->table}($keysString) VALUES ('$valuesString')";
-
-            // Imprimir la consulta para depuración
-            var_dump($query);
-            echo $query;
+            $query = "insert into {$this->table}($keysString) values ('$valuesString')";
+            var_dump("$query");
 
             $res = $this->db->query($query);
 
             if ($res) {
                 $ultimoId = $this->db->insert_id;
-                $data = $this->find($ultimoId);
+                $data = $this->findClase($ultimoId);
 
                 return $data;
             } else {
-                return "No se pudo crear el maestro";
+                return "No se pudo crear la clase";
             }
         } catch (mysqli_sql_exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 
+    
 
 
-    // Model.php
-
+    /**
+     * Método para actualizar un alumno.
+     *
+     * @param array $data Arreglo asociativo con los datos a actualizar.
+     * @return void
+     */
     public function updateMaestro($data)
     {
         // Este array almacenará los pares columna-valor para la consulta de actualización
@@ -351,23 +337,19 @@ class Model
         // Construir la consulta de actualización en la tabla 'usuarios'
         session_start();
         $userId = $_SESSION["maestroid_edit"];
-        $query = "UPDATE usuarios SET " . implode(", ", $updatePairs) . " WHERE id = '$userId'";
+        $query = "UPDATE usuarios SET " . implode(", ", $updatePairs) . " WHERE id = '$userId' AND rol_id = 2";
 
-        // Imprimir la consulta para depuración
-        var_dump($query);
-
-        // Ejecutar la consulta de actualización
         $this->db->query($query);
     }
 
-
-
-
+    /**
+     * Método para eliminar un alumno por su ID.
+     *
+     * @param integer $id ID del alumno a eliminar.
+     * @return void
+     */
     public function destroyMaestro($id)
     {
-        // Lógica específica para la tabla de maestros si es necesario
-        // ...
-
         // Llamada al método destroy genérico
         $this->destroy($id);
     }
@@ -408,6 +390,8 @@ class Model
 
             // Construir el query de inserción en la tabla 'usuarios'
             $query = "INSERT INTO {$this->table}($keysString) VALUES ('$valuesString')";
+
+            echo "Query: " . $query;
 
             $res = $this->db->query($query);
 
@@ -478,5 +462,11 @@ class Model
         $data = $res->fetch_all(MYSQLI_ASSOC);
 
         return $data;
+    }
+    
+    public function customQuery($queryString)
+    {
+        $res = $this->db->query($queryString);
+        return $res;
     }
 }

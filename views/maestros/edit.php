@@ -43,7 +43,7 @@ $_SESSION["maestroid_edit"] = $maestro["id"];
                 <select id="clase_id" name="clase_id" class="mt-1 p-2 w-full border rounded-md">
                     <?php
                     // Itera sobre las clases y crea las opciones del select
-                    foreach ($clasesMaestros as $clase) {
+                    foreach ($maestrosClase as $clase) {
                         // Marca como seleccionada la clase actual del maestro
                         $selected = ($clase["id"] == $maestro["clase_id"]) ? "selected" : "";
                         echo "<option value='{$clase["id"]}' $selected>{$clase["nombre"]}</option>";
